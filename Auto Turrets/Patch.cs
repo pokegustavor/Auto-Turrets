@@ -62,5 +62,21 @@ namespace Extra_Auto_Turrets
                 }
             }
         }
+        [HarmonyPatch(typeof(PLWDAnnihilatorInfo), "SetupShipStats")]
+        class Annihilator
+        {
+            static void Postfix(PLWDAnnihilatorInfo __instance, bool previewStats)
+            {
+                if (!previewStats)
+                {
+                    GameObject turretPoint = Object.Instantiate(__instance.RegularTurretPoints[0].gameObject, new Vector3(__instance.RegularTurretPoints[1].transform.position.x + (__instance.RegularTurretPoints[1].transform.right * 2.64f).x, __instance.RegularTurretPoints[1].transform.position.y - (__instance.RegularTurretPoints[1].transform.up * 1.98f).y, __instance.RegularTurretPoints[1].transform.position.z - (__instance.RegularTurretPoints[0].transform.forward * 1.9f).z), new Quaternion(__instance.RegularTurretPoints[1].rotation.x, __instance.RegularTurretPoints[1].rotation.y, __instance.RegularTurretPoints[1].rotation.z + 1.7071f, __instance.RegularTurretPoints[1].rotation.w + 0.7071f));
+                    turretPoint.transform.SetParent(__instance.Exterior.transform);
+                    Transform[] newAutoTurret = new Transform[1];
+                    newAutoTurret[0] = turretPoint.transform;
+                    __instance.AutoTurretPoints = newAutoTurret;
+                    __instance.MyStats.SetSlotLimit(ESlotType.E_COMP_AUTO_TURRET, 1);
+                }
+            }
+        }
     }
 }
