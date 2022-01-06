@@ -24,5 +24,24 @@ namespace Extra_Auto_Turrets
                 }
             }
         }
+        [HarmonyPatch(typeof(PLOutriderInfo), "SetupShipStats")]
+        class Outrider
+        {
+            static void Postfix(PLOutriderInfo __instance, bool previewStats)
+            {
+                if (!previewStats)
+                {
+                    GameObject turretPoint = Object.Instantiate(__instance.RegularTurretPoints[0].gameObject, new Vector3(__instance.MainTurretPoint.transform.position.x + (__instance.MainTurretPoint.transform.right * 1.35f).x, __instance.MainTurretPoint.transform.position.y, __instance.MainTurretPoint.transform.position.z), new Quaternion(__instance.MainTurretPoint.rotation.x, __instance.MainTurretPoint.rotation.y, __instance.MainTurretPoint.rotation.z, __instance.MainTurretPoint.rotation.w));
+                    turretPoint.transform.SetParent(__instance.Exterior.transform);
+                    Transform[] newAutoTurret = new Transform[2];
+                    newAutoTurret[0] = turretPoint.transform;
+                    GameObject turretPoint2 = Object.Instantiate(__instance.RegularTurretPoints[0].gameObject, new Vector3(__instance.MainTurretPoint.transform.position.x - (__instance.MainTurretPoint.transform.right * 1.35f).x, __instance.MainTurretPoint.transform.position.y, __instance.MainTurretPoint.transform.position.z), new Quaternion(__instance.MainTurretPoint.rotation.x, __instance.MainTurretPoint.rotation.y, __instance.MainTurretPoint.rotation.z, __instance.MainTurretPoint.rotation.w));
+                    turretPoint2.transform.SetParent(__instance.Exterior.transform);
+                    newAutoTurret[1] = turretPoint2.transform;
+                    __instance.AutoTurretPoints = newAutoTurret;
+                    __instance.MyStats.SetSlotLimit(ESlotType.E_COMP_AUTO_TURRET, 2);
+                }
+            }
+        }
     }
 }
