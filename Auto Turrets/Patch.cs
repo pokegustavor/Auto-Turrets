@@ -135,5 +135,59 @@ namespace Extra_Auto_Turrets
                 }
             }
         }
+        [HarmonyPatch(typeof(PLFluffyShipInfo), "SetupShipStats")]
+        class FluffyOne
+        {
+            static void Postfix(PLFluffyShipInfo __instance, bool previewStats)
+            {
+                if (!previewStats)
+                {
+                    GameObject turretPoint = Object.Instantiate(__instance.RegularTurretPoints[0].gameObject, new Vector3(__instance.RegularTurretPoints[0].transform.position.x - Mathf.Abs(__instance.RegularTurretPoints[0].transform.position.x - __instance.MainTurretPoint.transform.position.x) * 2, __instance.RegularTurretPoints[0].transform.position.y, __instance.RegularTurretPoints[0].transform.position.z), new Quaternion(__instance.RegularTurretPoints[0].rotation.x, __instance.RegularTurretPoints[0].rotation.y, __instance.RegularTurretPoints[0].rotation.z, __instance.RegularTurretPoints[0].rotation.w));
+                    turretPoint.transform.SetParent(__instance.Exterior.transform);
+                    Transform[] newAutoTurret = new Transform[2];
+                    newAutoTurret[0] = turretPoint.transform;
+                    GameObject turretPoint2 = Object.Instantiate(__instance.RegularTurretPoints[1].gameObject, new Vector3(__instance.RegularTurretPoints[1].transform.position.x, __instance.RegularTurretPoints[1].transform.position.y, __instance.RegularTurretPoints[1].transform.position.z + (__instance.RegularTurretPoints[1].transform.forward * 3.84f).z), new Quaternion(__instance.RegularTurretPoints[1].rotation.x, __instance.RegularTurretPoints[1].rotation.y, __instance.RegularTurretPoints[1].rotation.z, __instance.RegularTurretPoints[1].rotation.w));
+                    turretPoint2.transform.SetParent(__instance.Exterior.transform);
+                    newAutoTurret[1] = turretPoint2.transform;
+                    __instance.AutoTurretPoints = newAutoTurret;
+                    __instance.MyStats.SetSlotLimit(ESlotType.E_COMP_AUTO_TURRET, 2);
+                }
+            }
+        }
+        [HarmonyPatch(typeof(PLFluffyShipInfo2), "SetupShipStats")]
+        class FluffyTwo
+        {
+            static void Postfix(PLFluffyShipInfo2 __instance, bool previewStats)
+            {
+                if (!previewStats)
+                {
+                    GameObject turretPoint = Object.Instantiate(__instance.RegularTurretPoints[0].gameObject, new Vector3(__instance.RegularTurretPoints[0].transform.position.x, __instance.RegularTurretPoints[0].transform.position.y, __instance.RegularTurretPoints[0].transform.position.z - (__instance.RegularTurretPoints[0].transform.forward * 1.5403f).z), new Quaternion(__instance.RegularTurretPoints[0].rotation.x, __instance.RegularTurretPoints[0].rotation.y, __instance.RegularTurretPoints[0].rotation.z, __instance.RegularTurretPoints[0].rotation.w));
+                    turretPoint.transform.SetParent(__instance.Exterior.transform);
+                    Transform[] newAutoTurret = new Transform[2];
+                    newAutoTurret[0] = turretPoint.transform;
+                    GameObject turretPoint2 = Object.Instantiate(__instance.RegularTurretPoints[1].gameObject, new Vector3(__instance.RegularTurretPoints[1].transform.position.x, __instance.RegularTurretPoints[1].transform.position.y, __instance.RegularTurretPoints[1].transform.position.z - (__instance.RegularTurretPoints[1].transform.forward * 1.5403f).z), new Quaternion(__instance.RegularTurretPoints[1].rotation.x, __instance.RegularTurretPoints[1].rotation.y, __instance.RegularTurretPoints[1].rotation.z, __instance.RegularTurretPoints[1].rotation.w));
+                    turretPoint2.transform.SetParent(__instance.Exterior.transform);
+                    newAutoTurret[1] = turretPoint2.transform;
+                    __instance.AutoTurretPoints = newAutoTurret;
+                    __instance.MyStats.SetSlotLimit(ESlotType.E_COMP_AUTO_TURRET, 2);
+                }
+            }
+        }
+        [HarmonyPatch(typeof(PLCivilianStartingShipInfo), "SetupShipStats")]
+        class SunCicler
+        {
+            static void Postfix(PLCivilianStartingShipInfo __instance, bool previewStats)
+            {
+                if (!previewStats)
+                {
+                    GameObject turretPoint = Object.Instantiate(__instance.RegularTurretPoints[0].gameObject, new Vector3(__instance.RegularTurretPoints[0].transform.position.x + (__instance.RegularTurretPoints[0].transform.right * 1.08f).x, __instance.RegularTurretPoints[0].transform.position.y, __instance.RegularTurretPoints[0].transform.position.z), new Quaternion(__instance.RegularTurretPoints[0].rotation.x, __instance.RegularTurretPoints[0].rotation.y, __instance.RegularTurretPoints[0].rotation.z, __instance.RegularTurretPoints[0].rotation.w));
+                    turretPoint.transform.SetParent(__instance.Exterior.transform);
+                    Transform[] newAutoTurret = new Transform[1];
+                    newAutoTurret[0] = turretPoint.transform;
+                    __instance.AutoTurretPoints = newAutoTurret;
+                    __instance.MyStats.SetSlotLimit(ESlotType.E_COMP_AUTO_TURRET, 1);
+                }
+            }
+        }
     }
 }
